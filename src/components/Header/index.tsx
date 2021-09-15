@@ -1,9 +1,8 @@
-import React from 'react';
-import {useNavigation} from '@react-navigation/native';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import AntIcon from 'react-native-vector-icons/AntDesign';
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
-import {Button, Container, None, Title} from './styles';
+import { Button, Container, None, Title } from "./styles";
 
 type HeaderProps = {
   title: string;
@@ -28,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({
     <Container>
       {hasGoBack ? (
         <Button onPress={goBack}>
-          <AntIcon name="arrowleft" color="#fff" size={25} />
+          <AntDesign name="arrowleft" color="#fff" size={25} />
         </Button>
       ) : (
         <None />
@@ -38,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({
 
       {hasPlus ? (
         <Button onPress={handlePlus}>
-          <FeatherIcon name="plus" color="#fff" size={25} />
+          <Feather name="plus" color="#fff" size={25} />
         </Button>
       ) : (
         <None />

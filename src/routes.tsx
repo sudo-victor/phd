@@ -1,21 +1,22 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+} from "@react-navigation/native-stack";
 
-import ProductList from './screens/Products/ProductList';
-import AddProduct from './screens/Products/AddProduct';
+import ProductList from "./screens/Products/ProductList";
+import SaveProduct from "./screens/Products/SaveProduct";
+import Product from "./types/Product";
 
 export type RootStackParamList = {
   ProductList: undefined;
-  AddProduct: undefined;
+  SaveProduct: { product?: Product };
 };
 
 export type productScreensProps = NativeStackNavigationProp<
   RootStackParamList,
-  'ProductList'
+  "ProductList"
 >;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -26,9 +27,10 @@ function Router() {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-        }}>
+        }}
+      >
         <Stack.Screen name="ProductList" component={ProductList} />
-        <Stack.Screen name="AddProduct" component={AddProduct} />
+        <Stack.Screen name="SaveProduct" component={SaveProduct} />
       </Stack.Navigator>
     </NavigationContainer>
   );

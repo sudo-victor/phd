@@ -1,15 +1,17 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
+import Constants from "expo-constants";
 
 export const Container = styled.View`
   width: 100%;
-  height: 70px;
+  height: ${Constants.statusBarHeight + 70}px;
   padding: 20px;
+  padding-top: ${Constants.statusBarHeight + 20}px;
 
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 
-  background-color: ${props => props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors.primary};
 `;
 
 export const Title = styled.Text`
