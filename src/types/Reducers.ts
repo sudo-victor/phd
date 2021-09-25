@@ -1,5 +1,7 @@
 import Product from "./Product";
+import { Seller } from "./Seller";
 
-export default interface Reducers {
-  product: Product;
+export default interface IReducers {
+  product: Product[];
+  seller: Seller[];
 }

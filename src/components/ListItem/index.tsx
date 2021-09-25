@@ -1,41 +1,31 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/core";
-import { useDispatch } from "react-redux";
 import { FontAwesome5, Feather } from "@expo/vector-icons";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { productScreensProps } from "../../routes";
 import Item from "../Item";
 import { ContainerActions, EditButton, DeleteButton } from "./styles";
-import Product from "../../types/Product";
+import { productScreensProps } from "../../routes/ProductsRoutes";
 
 type Props = {
-  item: Product;
+  item: any;
+  handleDeleteItem: (item: any) => void;
+  goToEdit: (item: any) => void;
 };
 
-const RightActions: React.FC<Props> = ({ item }) => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation<productScreensProps>();
-
-  const handleDeleteProduct = () => {
-    dispatch({
-      type: "REMOVE_PRODUCT",
-      payload: { product: item },
-    });
-  };
-
-  const goToEdit = () => {
-    navigation.navigate("SaveProduct", { product: item });
-  };
-
+const RightActions: React.FC<Props> = ({
+  item,
+  handleDeleteItem,
+  goToEdit,
+}) => {
   {
     return (
       <ContainerActions>
-        <EditButton onPress={goToEdit}>
+        <EditButton onPress={() => goToEdit(item)}>
           <FontAwesome5 name="pencil-alt" color="#fff" size={18} />
         </EditButton>
 
-        <DeleteButton onPress={handleDeleteProduct}>
+        <DeleteButton onPress={() => handleDeleteItem(item)}>
           <Feather name="trash" color="#fff" size={18} />
         </DeleteButton>
       </ContainerActions>
@@ -43,9 +33,17 @@ const RightActions: React.FC<Props> = ({ item }) => {
   }
 };
 
-const ListItem: React.FC<Props> = ({ item }) => {
+const ListItem: React.FC<Props> = ({ item, handleDeleteItem, goToEdit }) => {
   return (
-    <Swipeable renderRightActions={() => <RightActions item={item} />}>
+    <Swipeable
+      renderRightActions={() => (
+        <RightActions
+          handleDeleteItem={handleDeleteItem}
+          goToEdit={goToEdit}
+          item={item}
+        />
+      )}
+    >
       <Item text={item.name} />
     </Swipeable>
   );
