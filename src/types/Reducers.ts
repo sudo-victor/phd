@@ -1,7 +1,9 @@
-import Product from "./Product";
-import { Seller } from "./Seller";
+import { IDaily } from "./Daily";
+import IProduct from "./Product";
+import { ISeller } from "./Seller";
 
 export default interface IReducers {
-  product: Product[];
-  seller: Seller[];
+  product: IProduct[];
+  seller: ISeller[];
+  daily: IDaily[];
 }

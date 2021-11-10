@@ -4,8 +4,4 @@ export const moneyTemplateToNumber = (value: string): number => {
 
 export const numberToMoneyTemplate = (value: number): string => {
   return `R$${value.toFixed(2).replace(".", ",")}`;
-  // return new Intl.NumberFormat("pt-BR", {
-  //   style: "currency",
-  //   currency: "BRL",
-  // }).format(value);
 };

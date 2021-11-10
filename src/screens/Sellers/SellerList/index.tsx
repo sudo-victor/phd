@@ -4,22 +4,21 @@ import { useNavigation } from "@react-navigation/native";
 
 import Layout from "../../../components/Layout";
 import ListItem from "../../../components/ListItem";
-import { ContainerList, EmpytListText } from "./styles";
+import { ContainerList } from "./styles";
 import { sellerScreensProps } from "../../../routes/SellersRoutes";
 import Reducers from "../../../types/Reducers";
 import { ISeller } from "../../../types/Seller";
+import EmptyListText from "../../../components/EmptyListText";
 
 const SellerList = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<sellerScreensProps>();
   const sellers = useSelector((state: Reducers) => state.seller);
 
-  const goToForm = () => {
-    navigation.navigate("SaveSeller");
-  };
-
-  const goToEdit = (item) => {
-    navigation.navigate("SaveSeller", { seller: item });
+  const goToForm = (item?) => {
+    item
+      ? navigation.navigate("SaveSeller", { seller: item })
+      : navigation.navigate("SaveSeller");
   };
 
   const handleDeleteSeller = (item) => {
@@ -30,17 +29,17 @@ const SellerList = () => {
   };
 
   return (
-    <Layout title="Lista de Vendedores" hasPlus handlePlus={goToForm}>
+    <Layout title="Lista de Vendedores" hasPlus handlePlus={() => goToForm()}>
       <ContainerList
         data={sellers}
         keyExtractor={(item: ISeller) => String(item.id)}
         ListEmptyComponent={() => (
-          <EmpytListText>Nenhum Vendedor Cadastrado</EmpytListText>
+          <EmptyListText text="Nenhum Vendedor Cadastrado" />
         )}
         renderItem={({ item }) => (
           <ListItem
             handleDeleteItem={handleDeleteSeller}
-            goToEdit={goToEdit}
+            goToEdit={goToForm}
             item={item}
           />
         )}

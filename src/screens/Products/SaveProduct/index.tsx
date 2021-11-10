@@ -7,7 +7,7 @@ import Layout from "../../../components/Layout";
 import TextInput from "../../../components/Inputs/TextInput";
 import SubmittingButton from "../../../components/SubmittingButton";
 import Product from "../../../types/Product";
-import { Form } from "./styles";
+import { Form, FieldsWrapper } from "./styles";
 import { moneyTemplateToNumber } from "../../../helpers/dataFormatting";
 import MoneyInput from "../../../components/Inputs/MoneyInput";
 import { productScreensProps } from "../../../routes/ProductsRoutes";
@@ -39,9 +39,8 @@ const SaveProduct = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    function activaButtonSubmitIfValidate() {
-      setProductIsEnable(validateProduct());
-    }
+    setProductIsEnable(validateProduct());
+    function activaButtonSubmitIfValidate() {}
 
     activaButtonSubmitIfValidate();
   }, [product]);
@@ -85,35 +84,41 @@ const SaveProduct = ({ route }) => {
       title={product.id ? "Editar Produto" : "Adicionar Produto"}
       hasGoBack
     >
-      <Form>
-        <TextInput
-          label="Nome"
-          value={product.name}
-          handleSetValue={(value: string) =>
-            setProduct({ ...product, name: value })
-          }
-        />
-        <MoneyInput
-          label="Entrada"
-          value={product.entryPrice}
-          handleSetValue={(value: number) =>
-            setProduct({ ...product, entryPrice: value })
-          }
-        />
-        <MoneyInput
-          label="Preço de Venda"
-          value={product.salePrice}
-          handleSetValue={(value: number) =>
-            setProduct({ ...product, salePrice: value })
-          }
+      <Form
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "space-between" }}
+        showsVerticalScrollIndicator={false}
+      >
+        <FieldsWrapper>
+          <TextInput
+            label="Nome"
+            value={product.name}
+            onChangeText={(value) => setProduct({ ...product, name: value })}
+          />
+          <MoneyInput
+            label="Entrada"
+            value={String(product.entryPrice)}
+            onChangeText={(value) => {
+              setProduct({
+                ...product,
+                entryPrice: Number(value.replace("R$", "")),
+              });
+            }}
+          />
+          <MoneyInput
+            label="Preço de Venda"
+            value={String(product.salePrice)}
+            onChangeText={(value) =>
+              setProduct({ ...product, salePrice: Number(value) })
+            }
+          />
+        </FieldsWrapper>
+
+        <SubmittingButton
+          enabled={productIsEnable}
+          onPress={handleSubmit}
+          text="Salvar Produto"
         />
       </Form>
-
-      <SubmittingButton
-        isActive={productIsEnable}
-        handleSubmit={handleSubmit}
-        text="Salvar Produto"
-      />
     </Layout>
   );
 };

@@ -1,22 +1,17 @@
 import React from "react";
+import { TextInputProps } from "react-native";
 
 import { Container, Label, Input } from "./styles";
 
-type MoneyInputProps = {
-  handleSetValue: (value: number) => void;
+type MoneyInputProps = TextInputProps & {
   label: string;
-  value: number;
 };
 
-const MoneyInput: React.FC<MoneyInputProps> = ({
-  label,
-  value,
-  handleSetValue,
-}) => {
+const MoneyInput: React.FC<MoneyInputProps> = ({ label, ...rest }) => {
   return (
     <Container>
       <Label>{label}</Label>
-      <Input type={"money"} value={value} onChangeText={handleSetValue} />
+      <Input type={"money"} {...rest} />
     </Container>
   );
 };

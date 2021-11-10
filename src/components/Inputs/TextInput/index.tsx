@@ -1,22 +1,17 @@
 import React from "react";
+import { TextInputProps } from "react-native";
 
 import { Container, Label, Input } from "./styles";
 
-type TextInputProps = {
-  handleSetValue: (value: string) => void;
+type Props = TextInputProps & {
   label: string;
-  value: string;
 };
 
-const TextInput: React.FC<TextInputProps> = ({
-  label,
-  value,
-  handleSetValue,
-}) => {
+const TextInput: React.FC<Props> = ({ label, ...rest }) => {
   return (
     <Container>
       <Label>{label}</Label>
-      <Input value={value} onChangeText={handleSetValue} />
+      <Input {...rest} />
     </Container>
   );
 };

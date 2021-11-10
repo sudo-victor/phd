@@ -4,22 +4,21 @@ import { useNavigation } from "@react-navigation/native";
 
 import Layout from "../../../components/Layout";
 import ListItem from "../../../components/ListItem";
-import { ContainerList, EmpytListText } from "./styles";
-import Product from "../../../types/Product";
+import { ContainerList } from "./styles";
+import IProduct from "../../../types/Product";
 import Reducers from "../../../types/Reducers";
 import { productScreensProps } from "../../../routes/ProductsRoutes";
+import EmptyListText from "../../../components/EmptyListText";
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<productScreensProps>();
   const products = useSelector((state: Reducers) => state.product);
 
-  const goToForm = () => {
-    navigation.navigate("SaveProduct");
-  };
-
-  const goToEdit = (item) => {
-    navigation.navigate("SaveProduct", { product: item });
+  const goToForm = (item?) => {
+    item
+      ? navigation.navigate("SaveProduct", { product: item })
+      : navigation.navigate("SaveProduct");
   };
 
   const handleDeleteProduct = (item) => {
@@ -30,17 +29,17 @@ const ProductList = () => {
   };
 
   return (
-    <Layout title="Lista de Produtos" hasPlus handlePlus={goToForm}>
+    <Layout title="Lista de Produtos" hasPlus handlePlus={() => goToForm()}>
       <ContainerList
         data={products}
-        keyExtractor={(item: Product) => String(item.id)}
+        keyExtractor={(item: IProduct) => String(item.id)}
         ListEmptyComponent={() => (
-          <EmpytListText>Nenhum Produto Cadastrado</EmpytListText>
+          <EmptyListText text="Nenhum Produto Cadastrado" />
         )}
         renderItem={({ item }) => (
           <ListItem
             handleDeleteItem={handleDeleteProduct}
-            goToEdit={goToEdit}
+            goToEdit={goToForm}
             item={item}
           />
         )}

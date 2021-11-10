@@ -5,7 +5,6 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import Item from "../Item";
 import { ContainerActions, EditButton, DeleteButton } from "./styles";
-import { productScreensProps } from "../../routes/ProductsRoutes";
 
 type Props = {
   item: any;

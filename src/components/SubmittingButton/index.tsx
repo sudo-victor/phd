@@ -1,20 +1,18 @@
 import React from "react";
+import { RectButtonProps } from "react-native-gesture-handler";
 
 import { Container, Text } from "./styles";
 
-type SubmittingButtonProps = {
-  handleSubmit: () => void;
-  isActive?: boolean;
+type SubmittingButtonProps = RectButtonProps & {
   text: string;
 };
 
 const SubmittingButton: React.FC<SubmittingButtonProps> = ({
-  handleSubmit,
-  isActive = true,
   text,
+  ...rest
 }) => {
   return (
-    <Container enabled={isActive} onPress={handleSubmit}>
+    <Container {...rest}>
       <Text>{text}</Text>
     </Container>
   );

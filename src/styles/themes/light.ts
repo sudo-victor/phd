@@ -1,8 +1,8 @@
 export default {
   colors: {
     primary: "#7161EF",
-    background: "#FFFAFF",
-    inputBackground: "#f4f4f4",
+    background: "#f0f2f5",
+    inputBackground: "#fff",
     label: "#aaa",
 
     white: "#DFDFDF",
@@ -19,5 +19,12 @@ export default {
     redLinear: ["#DD4573", "#DD4573"],
 
     brown: "#872200",
+  },
+
+  fonts: {
+    light: "Poppins_300Light",
+    regular: "Poppins_400Regular",
+    medium: "Poppins_500Medium",
+    bold: "Poppins_700Bold",
   },
 };

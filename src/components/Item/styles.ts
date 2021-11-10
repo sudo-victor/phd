@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   width: 100%;
@@ -9,13 +9,14 @@ export const Container = styled.View`
   flex-direction: row;
   align-items: center;
 
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.background};
   border-radius: 3px;
-  border: 1px solid ${props => props.theme.colors.white};
+  border-bottom-width: 1px;
+  border-bottom-color: ${(props) => props.theme.colors.white};
 `;
 
 export const Text = styled.Text`
   font-size: 20px;
   font-weight: bold;
-  color: ${props => props.theme.colors.gray};
+  color: ${(props) => props.theme.colors.gray};
 `;

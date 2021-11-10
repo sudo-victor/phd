@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
+import DailyStackRoutes from "./DailyRoutes";
 import ProductStackRoutes from "./ProductsRoutes";
 import SellerStackRoutes from "./SellersRoutes";
 
@@ -18,6 +19,15 @@ const TabRoutes = () => {
         tabBarShowLabel: false,
       }}
     >
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome5 name="clipboard-list" size={size} color={color} />
+          ),
+        }}
+        name="Daily"
+        component={DailyStackRoutes}
+      />
       <Tab.Screen
         options={{
           tabBarIcon: ({ size, color }) => (

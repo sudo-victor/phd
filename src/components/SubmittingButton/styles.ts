@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 import { RectButton } from "react-native-gesture-handler";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export const Container = styled(RectButton)`
   width: 100%;
   height: 55px;
-  margin-bottom: 40px;
 
   align-items: center;
   justify-content: center;
@@ -15,9 +15,8 @@ export const Container = styled(RectButton)`
 `;
 
 export const Text = styled.Text`
-  font-family: "Roboto";
-  font-weight: bold;
-  font-size: 18px;
+  font-size: ${RFValue(18)}px;
+  font-family: ${({ theme }) => theme.fonts.medium};
   line-height: 21px;
   color: #ffffff;
 `;

@@ -1,28 +1,25 @@
 import React from "react";
-import { Picker } from "@react-native-picker/picker";
+import { Picker, PickerProps } from "@react-native-picker/picker";
 
 import { Container, Label, Input, InputWrapper } from "./styles";
 import { IOption } from "../../../types/Input";
 import IProduct from "../../../types/Product";
 
-type SelectInputProps = {
-  handleSetValue: (_: any, id: number) => void;
+type SelectInputProps = PickerProps & {
   label: string;
-  value: string | number;
   valueGroup: IOption[] | IProduct[];
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
   label,
-  value,
   valueGroup,
-  handleSetValue,
+  ...rest
 }) => {
   return (
     <Container>
       <Label>{label}</Label>
       <InputWrapper>
-        <Input selectedValue={value} onValueChange={handleSetValue}>
+        <Input {...rest}>
           {valueGroup.map((data, idx) => (
             <Picker.Item key={idx} label={data.name} value={data.id} />
           ))}
