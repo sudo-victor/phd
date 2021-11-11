@@ -1,3 +1,4 @@
+import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -26,8 +27,8 @@ export const TextWrapper = styled.View`
 `;
 
 export const Text = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
+  font-size: ${RFValue(16)}px;
+  font-family: ${(props) => props.theme.fonts.medium};
   color: ${(props) => props.theme.colors.gray};
 `;
 

@@ -17,7 +17,7 @@ export const CommissionsContainer = styled.View`
 `;
 
 export const FieldWrapper = styled.View`
-  width: 45%;
+  width: 48%;
 `;
 
 export const Commissions = styled.View`

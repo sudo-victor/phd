@@ -8,6 +8,7 @@ import TextInput from "../../../components/Inputs/TextInput";
 import MoneyInput from "../../../components/Inputs/MoneyInput";
 import SelectInput from "../../../components/Inputs/SelectInput";
 import SubmittingButton from "../../../components/SubmittingButton";
+import Commission from "../../../components/Commission";
 
 import {
   CommissionsContainer,
@@ -24,17 +25,6 @@ import {
 import { ICommission, ISeller } from "../../../types/Seller";
 import Reducers from "../../../types/Reducers";
 import { IOption } from "../../../types/Input";
-import Commission from "../../../components/Commission";
-
-const initialSeller = {
-  name: "",
-  commissions: [],
-};
-
-const initialCommission = {
-  productId: null,
-  commission: 0,
-};
 
 const initialOption: IOption = { name: "Selecione", id: null };
 
@@ -43,9 +33,11 @@ const SaveSeller = ({ route }) => {
   const products = useSelector((state: Reducers) => state.product);
   const dispatch = useDispatch();
 
-  const [seller, setSeller] = useState<ISeller>(initialSeller);
-  const [currentCommission, setCurrentCommission] =
-    useState<ICommission>(initialCommission);
+  const [sellerId, setSellerId] = useState(null);
+  const [name, setName] = useState("");
+  const [currentProductId, setCurrentProductId] = useState(null);
+  const [currentCommission, setCurrentCommission] = useState("");
+
   const [commissionGroup, setCommissionGroup] = useState<ICommission[]>([]);
   const [options, setOptions] = useState<IOption[]>([]);
 
@@ -56,7 +48,9 @@ const SaveSeller = ({ route }) => {
   useEffect(() => {
     function loadSellerIfExists() {
       if (route.params) {
-        setSeller(route.params.seller);
+        console.log(route.params);
+        setSellerId(route.params.seller.id);
+        setName(route.params.seller.name);
         setCommissionGroup(route.params.seller.commissions);
       }
     }
@@ -84,7 +78,7 @@ const SaveSeller = ({ route }) => {
     }
 
     activeSellerButtonIfValide();
-  }, [seller]);
+  }, [name]);
 
   const handleSubmit = (): void => {
     if (alreadySubmitted) return;
@@ -93,25 +87,25 @@ const SaveSeller = ({ route }) => {
     const newSeller: ISeller = getDataSeller();
 
     dispatch({
-      type: seller.id ? "UPDATE_SELLER" : "ADD_SELLER",
+      type: sellerId ? "UPDATE_SELLER" : "ADD_SELLER",
       payload: { seller: newSeller },
     });
 
     navigation.goBack();
 
     Keyboard.dismiss();
-    setSeller(initialSeller);
+    setSellerId(0);
+    setName("");
+    setCommissionGroup([]);
   };
 
   const handleAddCommission = (): void => {
     let isUpdate = false;
 
     const commissionGroupAltered = commissionGroup.map((commission) => {
-      if (commission.productId === currentCommission.productId) {
+      if (commission.productId === currentProductId) {
         isUpdate = true;
-        commission.commission += moneyTemplateToNumber(
-          String(currentCommission.commission)
-        );
+        commission.commission += moneyTemplateToNumber(currentCommission);
       }
 
       return commission;
@@ -120,16 +114,17 @@ const SaveSeller = ({ route }) => {
     if (isUpdate) {
       setCommissionGroup(commissionGroupAltered);
     } else {
-      let newCurrent = currentCommission;
+      let newCurrent: ICommission = {
+        commission: moneyTemplateToNumber(currentCommission),
+        productId: currentProductId,
+      };
       newCurrent.id = Math.random();
-      newCurrent.commission = moneyTemplateToNumber(
-        String(newCurrent.commission)
-      );
 
       setCommissionGroup([...commissionGroup, newCurrent]);
     }
 
-    setCurrentCommission(initialCommission);
+    setCurrentCommission("");
+    setCurrentProductId(null);
   };
 
   const handleDeleteCommission = (id: string | number) => {
@@ -141,19 +136,17 @@ const SaveSeller = ({ route }) => {
   };
 
   const validateSeller = (): boolean => {
-    return !!(seller.name !== "");
+    return !!(name !== "");
   };
 
   const validateCommission = (): boolean => {
-    return !!(
-      currentCommission.commission !== 0 && currentCommission.productId !== null
-    );
+    return !!(Number(currentCommission) !== 0 && currentProductId !== null);
   };
 
   const getDataSeller = () => {
     return {
-      id: seller.id ? seller.id : Math.random(),
-      name: seller.name,
+      id: sellerId ? sellerId : Math.random(),
+      name: name,
       commissions: commissionGroup,
     };
   };
@@ -172,7 +165,7 @@ const SaveSeller = ({ route }) => {
 
   return (
     <Layout
-      title={seller.id ? "Editar Vendedor" : "Adicionar Vendedor"}
+      title={sellerId ? "Editar Vendedor" : "Adicionar Vendedor"}
       hasGoBack
     >
       <Form
@@ -180,25 +173,14 @@ const SaveSeller = ({ route }) => {
         showsVerticalScrollIndicator={false}
       >
         <FormWrapper>
-          <TextInput
-            label="Nome"
-            value={seller.name}
-            onChangeText={(value: string) =>
-              setSeller({ ...seller, name: value })
-            }
-          />
+          <TextInput label="Nome" value={name} onChangeText={setName} />
 
           <CommissionsContainer>
             <FieldWrapper>
               <SelectInput
                 label="Produto"
-                selectedValue={currentCommission.productId}
-                onValueChange={(productId) =>
-                  setCurrentCommission({
-                    ...currentCommission,
-                    productId: Number(productId),
-                  })
-                }
+                selectedValue={currentProductId}
+                onValueChange={(productId) => setCurrentProductId(productId)}
                 valueGroup={options}
               />
             </FieldWrapper>
@@ -206,13 +188,8 @@ const SaveSeller = ({ route }) => {
             <FieldWrapper>
               <MoneyInput
                 label="Comissão"
-                value={String(currentCommission.commission)}
-                onChangeText={(value) =>
-                  setCurrentCommission({
-                    ...currentCommission,
-                    commission: Number(value),
-                  })
-                }
+                value={currentCommission}
+                onChangeText={setCurrentCommission}
               />
             </FieldWrapper>
           </CommissionsContainer>
@@ -225,6 +202,7 @@ const SaveSeller = ({ route }) => {
           <Commissions>
             {commissionGroup.map((item) => (
               <Commission
+                key={item.id}
                 item={getItemFormatted(item)}
                 handleDeleteCommission={handleDeleteCommission}
               />

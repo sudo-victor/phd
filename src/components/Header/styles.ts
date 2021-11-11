@@ -18,7 +18,6 @@ export const Container = styled.View`
 export const Title = styled.Text`
   color: #fff;
   font-size: ${RFValue(19)}px;
-  line-height: ${RFValue(21)}px;
   font-family: ${({ theme }) => theme.fonts.medium};
 `;
 

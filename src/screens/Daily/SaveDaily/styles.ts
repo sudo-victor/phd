@@ -3,33 +3,40 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { Feather } from "@expo/vector-icons";
 
 export const Date = styled.Text`
+  margin-bottom: 16px;
+
   font-size: ${RFValue(16)}px;
-  line-height: 21px;
   font-family: ${({ theme }) => theme.fonts.medium};
-  text-align: center;
   color: ${(props) => props.theme.colors.gray};
+  line-height: 21px;
+  text-align: center;
+`;
+
+export const InfoContainer = styled.ScrollView.attrs({
+  horizontal: true,
+  showsHorizontalScrollIndicator: false,
+})`
+  height: ${RFValue(50)}px;
 `;
 
 export const ButtonsContainer = styled.View`
-  margin-top: 15px;
+  margin-top: 16px;
 
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
 `;
 
 export const Icon = styled(Feather)`
   margin-right: 5px;
-
-  color: #555;
 `;
 
 export const Button = styled.TouchableOpacity.attrs({
   activeOpacity: 0.5,
 })`
-  width: 100%;
+  width: 48%;
   height: 65px;
-  margin-top: 5px;
 
   flex-direction: row;
 
@@ -38,17 +45,12 @@ export const Button = styled.TouchableOpacity.attrs({
   justify-content: center;
 
   border-radius: 8px;
-  border-width: 1.5px;
-  border-style: solid;
+  border: 1.5px solid #969cb2;
 `;
 
-export const SaleButton = styled(Button)`
-  border-color: ${(props) => props.theme.colors.greenSecondary};
-`;
+export const SaleButton = styled(Button)``;
 
-export const SpentButton = styled(Button)`
-  border-color: ${(props) => props.theme.colors.brown};
-`;
+export const SpentButton = styled(Button)``;
 
 export const ButtonText = styled.Text`
   line-height: 26px;
@@ -58,12 +60,13 @@ export const ButtonText = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
 `;
 
-export const BalanceContainer = styled.View``;
+export const CashFlow = styled.View`
+  padding-top: 16px;
+  flex: 1;
+`;
 
-export const BalanceCard = styled.View``;
-
-export const BalanceGroup = styled.View``;
-
-export const BalanceGroupTitle = styled.Text``;
-
-export const BalanceGroupValue = styled.Text``;
+export const CashFlowTitle = styled.Text`
+  font-size: ${RFValue(18)}px;
+  font-family: ${({ theme }) => theme.fonts.medium};
+  color: ${(props) => props.theme.colors.gray};
+`;

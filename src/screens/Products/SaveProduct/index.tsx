@@ -6,24 +6,24 @@ import { Keyboard } from "react-native";
 import Layout from "../../../components/Layout";
 import TextInput from "../../../components/Inputs/TextInput";
 import SubmittingButton from "../../../components/SubmittingButton";
-import Product from "../../../types/Product";
-import { Form, FieldsWrapper } from "./styles";
-import { moneyTemplateToNumber } from "../../../helpers/dataFormatting";
 import MoneyInput from "../../../components/Inputs/MoneyInput";
-import { productScreensProps } from "../../../routes/ProductsRoutes";
+import Product from "../../../types/Product";
 import IProduct from "../../../types/Product";
-
-const initialProduct = {
-  name: "",
-  entryPrice: 0,
-  salePrice: 0,
-};
+import {
+  moneyTemplateToNumber,
+  numberToMoneyTemplate,
+} from "../../../helpers/dataFormatting";
+import { productScreensProps } from "../../../routes/ProductsRoutes";
+import { Form, FieldsWrapper } from "./styles";
 
 const SaveProduct = ({ route }) => {
   const navigation = useNavigation<productScreensProps>();
   const dispatch = useDispatch();
 
-  const [product, setProduct] = useState<Product>(initialProduct);
+  const [productId, setProductId] = useState(0);
+  const [name, setName] = useState("");
+  const [entryPrice, setEntryPrice] = useState("");
+  const [salePrice, setSalePrice] = useState("");
 
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [productIsEnable, setProductIsEnable] = useState(false);
@@ -31,7 +31,11 @@ const SaveProduct = ({ route }) => {
   useEffect(() => {
     function loadProductIfExists() {
       if (route.params) {
-        setProduct(route.params.product);
+        const product = route.params.product;
+        setProductId(product.id);
+        setName(product.name);
+        setEntryPrice(numberToMoneyTemplate(product.entryPrice));
+        setSalePrice(numberToMoneyTemplate(product.salePrice));
       }
     }
 
@@ -43,7 +47,7 @@ const SaveProduct = ({ route }) => {
     function activaButtonSubmitIfValidate() {}
 
     activaButtonSubmitIfValidate();
-  }, [product]);
+  }, [name, entryPrice, salePrice]);
 
   const handleSubmit = (): void => {
     if (alreadySubmitted) return;
@@ -52,36 +56,40 @@ const SaveProduct = ({ route }) => {
     const newProduct: Product = getDataProduct();
 
     dispatch({
-      type: product.id ? "UPDATE_PRODUCT" : "ADD_PRODUCT",
+      type: productId ? "UPDATE_PRODUCT" : "ADD_PRODUCT",
       payload: { product: newProduct },
     });
 
     navigation.goBack();
 
     Keyboard.dismiss();
-    setProduct(initialProduct);
+    setProductId(0);
+    setName("");
+    setEntryPrice("");
+    setSalePrice("");
   };
 
   const validateProduct = (): boolean => {
     return !!(
-      product.name !== "" &&
-      moneyTemplateToNumber(String(product.entryPrice)) > 0 &&
-      moneyTemplateToNumber(String(product.salePrice)) > 0
+      name !== "" &&
+      moneyTemplateToNumber(entryPrice) > 0 &&
+      moneyTemplateToNumber(salePrice) > 0
     );
   };
 
   const getDataProduct = (): IProduct => {
+    console.log(moneyTemplateToNumber(entryPrice));
     return {
-      id: product.id ? product.id : Math.random(),
-      name: product.name,
-      entryPrice: moneyTemplateToNumber(String(product.entryPrice)),
-      salePrice: moneyTemplateToNumber(String(product.salePrice)),
+      id: productId ? productId : Math.random(),
+      name: name,
+      entryPrice: moneyTemplateToNumber(entryPrice),
+      salePrice: moneyTemplateToNumber(salePrice),
     };
   };
 
   return (
     <Layout
-      title={product.id ? "Editar Produto" : "Adicionar Produto"}
+      title={productId ? "Editar Produto" : "Adicionar Produto"}
       hasGoBack
     >
       <Form
@@ -89,27 +97,16 @@ const SaveProduct = ({ route }) => {
         showsVerticalScrollIndicator={false}
       >
         <FieldsWrapper>
-          <TextInput
-            label="Nome"
-            value={product.name}
-            onChangeText={(value) => setProduct({ ...product, name: value })}
-          />
+          <TextInput label="Nome" value={name} onChangeText={setName} />
           <MoneyInput
             label="Entrada"
-            value={String(product.entryPrice)}
-            onChangeText={(value) => {
-              setProduct({
-                ...product,
-                entryPrice: Number(value.replace("R$", "")),
-              });
-            }}
+            value={String(entryPrice)}
+            onChangeText={setEntryPrice}
           />
           <MoneyInput
             label="Preço de Venda"
-            value={String(product.salePrice)}
-            onChangeText={(value) =>
-              setProduct({ ...product, salePrice: Number(value) })
-            }
+            value={String(salePrice)}
+            onChangeText={setSalePrice}
           />
         </FieldsWrapper>
 
