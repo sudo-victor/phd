@@ -1,7 +1,7 @@
 import React from "react";
 
 import Layout from "../../../components/Layout";
-import { InfoCard } from "../../../components/InfoCard";
+import { DataCard, InfoCard } from "../../../components/InfoCard";
 
 import {
   Icon,
@@ -13,18 +13,68 @@ import {
   SpentButton,
   CashFlow,
   CashFlowTitle,
+  CashFlowCards,
+  CashFlowCardSeparator,
 } from "./styles";
+import { CashFlowCard } from "../../../components/CashFlowCard";
 
 const SaveDaily = () => {
+  const data = [
+    {
+      id: "1",
+      title: "2 Camisas",
+      value: "R$ 80,00",
+      type: "sale",
+      doneAt: "13:00",
+    },
+    {
+      id: "2",
+      title: "1 Água",
+      value: "R$ 2,00",
+      type: "spent",
+      doneAt: "15:00",
+    },
+  ];
+
+  const infoCards: DataCard[] = [
+    {
+      id: "1",
+      title: "Dinheiro",
+      value: "R$ 2.700,00",
+      type: "money",
+      updatedAt: "Última entrada às 17:20",
+    },
+    {
+      id: "2",
+      title: "Cartão",
+      value: "R$ 530,00",
+      type: "card",
+      updatedAt: "Última entrada às 16:00",
+    },
+    {
+      id: "3",
+      title: "Gastos",
+      value: "R$ 10,00",
+      type: "spent",
+      updatedAt: "Última saída às 13:00",
+    },
+    {
+      id: "4",
+      title: "Total",
+      value: "R$ 3.220,00",
+      type: "total",
+      updatedAt: "Último movimento às 17:20",
+    },
+  ];
+
   return (
     <Layout title="Movimento de Caixa" hasGoBack>
       <Date>Hoje</Date>
 
       <InfoContainer>
-        <InfoCard title="Dinheiro" value="R$ 17.000,00" type="money" />
-        <InfoCard title="Cartão" value="R$ 17.000,00" type="card" />
-        <InfoCard title="Gastos" value="R$ 17.000,00" type="spent" />
-        <InfoCard title="Total" value="R$ 17.000,00" type="total" />
+        {infoCards.map((info) => (
+          <InfoCard key={info.id} data={info} />
+        ))}
       </InfoContainer>
 
       <ButtonsContainer>
@@ -40,6 +90,13 @@ const SaveDaily = () => {
 
       <CashFlow>
         <CashFlowTitle>Listagem</CashFlowTitle>
+
+        <CashFlowCards
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <CashFlowCard data={item} />}
+          ItemSeparatorComponent={() => <CashFlowCardSeparator />}
+        />
       </CashFlow>
     </Layout>
   );

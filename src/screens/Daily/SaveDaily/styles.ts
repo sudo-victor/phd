@@ -66,7 +66,17 @@ export const CashFlow = styled.View`
 `;
 
 export const CashFlowTitle = styled.Text`
+  margin-bottom: 10px;
+
   font-size: ${RFValue(18)}px;
   font-family: ${({ theme }) => theme.fonts.medium};
   color: ${(props) => props.theme.colors.gray};
+`;
+
+export const CashFlowCards = styled.FlatList.attrs({
+  showsVerticalScrollIndicator: false,
+})``;
+
+export const CashFlowCardSeparator = styled.View`
+  margin-bottom: 10px;
 `;

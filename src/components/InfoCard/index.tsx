@@ -10,10 +10,16 @@ import {
   UpdatedAt,
 } from "./styles";
 
-type Props = {
+export type DataCard = {
+  id: string;
   title: string;
   value: string;
+  updatedAt: string;
   type: "money" | "card" | "spent" | "total";
+};
+
+type Props = {
+  data: DataCard;
 };
 
 const icons = {
@@ -23,18 +29,18 @@ const icons = {
   total: "cash-register",
 };
 
-const InfoCard: React.FC<Props> = ({ title, value, type }) => {
+const InfoCard: React.FC<Props> = ({ data }) => {
   return (
-    <Container type={type}>
+    <Container type={data.type}>
       <Header>
-        <Title type={type}>{title}</Title>
+        <Title type={data.type}>{data.title}</Title>
 
-        <Icon type={type} name={icons[type]} />
+        <Icon type={data.type} name={icons[data.type]} />
       </Header>
 
       <Footer>
-        <Value type={type}>{value}</Value>
-        <UpdatedAt type={type}>Última entrada ás 13:00</UpdatedAt>
+        <Value type={data.type}>{data.value}</Value>
+        <UpdatedAt type={data.type}>{data.updatedAt}</UpdatedAt>
       </Footer>
     </Container>
   );
