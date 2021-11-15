@@ -1,23 +1,17 @@
-import { useNavigation } from "@react-navigation/core";
 import React from "react";
+import { useNavigation } from "@react-navigation/core";
 
 import Layout from "../../../components/Layout";
-import Sale, { Item, ItemSale } from "../../../components/Sale";
+import Spent from "../../../components/Spent";
 import H2 from "../../../components/Titles/H2";
 import { dailyScreensProps } from "../../../routes/DailyRoutes";
 
-import {
-  Container,
-  CommissionContainer,
-  ItemList,
-  SaleContainer,
-  SeparatorList,
-} from "./styles";
+import { Container, ItemList, SaleContainer, SeparatorList } from "./styles";
 
 const SpentList = () => {
   const navigation = useNavigation<dailyScreensProps>();
 
-  const sales: Item[] = [
+  const spents = [
     {
       id: "1",
       title: "2 Camisas",
@@ -68,25 +62,19 @@ const SpentList = () => {
     },
   ];
 
-  const commissions = [
-    { id: "1", title: "Fábio", value: "R$ 180,00" },
-    { id: "2", title: "Cacau", value: "R$ 580,00" },
-    { id: "3", title: "Pedro", value: "R$ 780,00" },
-  ];
-
   const goToForm = () => {
     navigation.navigate("SaveSpent");
   };
 
   return (
-    <Layout title="Vendas" hasGoBack hasPlus handlePlus={() => goToForm()}>
+    <Layout title="Gastos" hasGoBack hasPlus handlePlus={() => goToForm()}>
       <Container>
         <SaleContainer>
-          <H2>Lista de Vendas</H2>
+          <H2>Lista de Gastos</H2>
           <ItemList
-            data={sales}
+            data={spents}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <Sale item={item} />}
+            renderItem={({ item }) => <Spent item={item} />}
             ItemSeparatorComponent={({ item }) => <SeparatorList />}
           />
         </SaleContainer>

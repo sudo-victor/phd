@@ -131,7 +131,9 @@ const SaveDaily = ({ route }) => {
     navigation.navigate("SaleList");
   };
 
-  const handleNavigateToSpent = () => {};
+  const handleNavigateToSpent = () => {
+    navigation.navigate("SpentList");
+  };
 
   return (
     <Layout title="Movimento de Caixa" hasGoBack>

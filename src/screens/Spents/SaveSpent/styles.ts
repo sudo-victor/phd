@@ -2,18 +2,13 @@ import styled from "styled-components/native";
 
 export const Container = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
-})``;
+})`
+  flex-grow: 1;
+`;
 
-export const WrapperHorizontal = styled.View`
-  flex-direction: row;
+export const Form = styled.View`
   justify-content: space-between;
-  align-items: center;
+  background: red;
 `;
 
-export const WrapperVertical = styled.View`
-  justify-content: space-between;
-`;
-
-export const FieldWrapper = styled.View`
-  width: 48%;
-`;
+export const FieldsWrapper = styled.View``;

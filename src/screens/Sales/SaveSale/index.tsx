@@ -36,7 +36,7 @@ const SaveSale = () => {
   const [currentProductId, setCurrentProductId] = useState(null);
   const [currentSeller, setCurrentSeller] = useState(null);
 
-  const [discount, setDiscount] = useState("");
+  const [discount, setDiscount] = useState("0");
   const [description, setDescription] = useState("");
 
   useEffect(() => {

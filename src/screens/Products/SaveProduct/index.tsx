@@ -22,8 +22,8 @@ const SaveProduct = ({ route }) => {
 
   const [productId, setProductId] = useState(0);
   const [name, setName] = useState("");
-  const [entryPrice, setEntryPrice] = useState("");
-  const [salePrice, setSalePrice] = useState("");
+  const [entryPrice, setEntryPrice] = useState("0");
+  const [salePrice, setSalePrice] = useState("0");
 
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [productIsEnable, setProductIsEnable] = useState(false);
@@ -97,7 +97,12 @@ const SaveProduct = ({ route }) => {
         showsVerticalScrollIndicator={false}
       >
         <FieldsWrapper>
-          <TextInput label="Nome" value={name} onChangeText={setName} />
+          <TextInput
+            label="Nome"
+            placeholder="Ex: Camisa"
+            value={name}
+            onChangeText={setName}
+          />
           <MoneyInput
             label="Entrada"
             value={String(entryPrice)}

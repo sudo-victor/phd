@@ -43,7 +43,7 @@ const icons = {
   money: "cash-usd-outline",
 };
 
-export const ItemSale: React.FC<Props> = ({ item }) => {
+export const ItemSpent: React.FC<Props> = ({ item }) => {
   return (
     <Container>
       <Header>
@@ -55,7 +55,7 @@ export const ItemSale: React.FC<Props> = ({ item }) => {
         <TypeWrapper>
           <Icon name={icons[item.type]} type={item.type} />
           <Separator />
-          <SaleBy>{item.saleBy}</SaleBy>
+          <SaleBy>Loja</SaleBy>
         </TypeWrapper>
 
         <CreatedAt>{item.createdAt}</CreatedAt>
@@ -92,7 +92,7 @@ const RightActions: React.FC<Props> = ({
   }
 };
 
-const Sale: React.FC<Props> = ({ item, handleDeleteItem, goToEdit }) => {
+const Spent: React.FC<Props> = ({ item, handleDeleteItem, goToEdit }) => {
   return (
     <Swipeable
       renderRightActions={() => (
@@ -103,9 +103,9 @@ const Sale: React.FC<Props> = ({ item, handleDeleteItem, goToEdit }) => {
         />
       )}
     >
-      <ItemSale item={item} />
+      <ItemSpent item={item} />
     </Swipeable>
   );
 };
 
-export default Sale;
+export default Spent;

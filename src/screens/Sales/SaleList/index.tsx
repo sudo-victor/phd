@@ -1,18 +1,12 @@
-import { useNavigation } from "@react-navigation/core";
 import React from "react";
+import { useNavigation } from "@react-navigation/core";
 
 import Layout from "../../../components/Layout";
-import Sale, { Item, ItemSale } from "../../../components/Sale";
+import Sale from "../../../components/Sale";
 import H2 from "../../../components/Titles/H2";
 import { dailyScreensProps } from "../../../routes/DailyRoutes";
 
-import {
-  Container,
-  CommissionContainer,
-  SaleContainer,
-  ItemList,
-  SeparatorList,
-} from "./styles";
+import { Container, SaleContainer, ItemList, SeparatorList } from "./styles";
 
 const SaleList = () => {
   const navigation = useNavigation<dailyScreensProps>();
@@ -66,12 +60,6 @@ const SaleList = () => {
       saleBy: "Fábio",
       createdAt: "18:00",
     },
-  ];
-
-  const commissions = [
-    { id: "1", title: "Fábio", value: "R$ 180,00" },
-    { id: "2", title: "Cacau", value: "R$ 580,00" },
-    { id: "3", title: "Pedro", value: "R$ 780,00" },
   ];
 
   const goToForm = () => {

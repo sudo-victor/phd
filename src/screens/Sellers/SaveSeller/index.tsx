@@ -36,7 +36,7 @@ const SaveSeller = ({ route }) => {
   const [sellerId, setSellerId] = useState(null);
   const [name, setName] = useState("");
   const [currentProductId, setCurrentProductId] = useState(null);
-  const [currentCommission, setCurrentCommission] = useState("");
+  const [currentCommission, setCurrentCommission] = useState("0");
 
   const [commissionGroup, setCommissionGroup] = useState<ICommission[]>([]);
   const [options, setOptions] = useState<IOption[]>([]);
@@ -173,7 +173,12 @@ const SaveSeller = ({ route }) => {
         showsVerticalScrollIndicator={false}
       >
         <FormWrapper>
-          <TextInput label="Nome" value={name} onChangeText={setName} />
+          <TextInput
+            label="Nome"
+            placeholder="Ex: Pedro"
+            value={name}
+            onChangeText={setName}
+          />
 
           <CommissionsContainer>
             <FieldWrapper>
