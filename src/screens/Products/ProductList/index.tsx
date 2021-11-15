@@ -4,11 +4,13 @@ import { useNavigation } from "@react-navigation/native";
 
 import Layout from "../../../components/Layout";
 import ListItem from "../../../components/ListItem";
-import { ContainerList } from "./styles";
+import EmptyListText from "../../../components/EmptyListText";
+
 import IProduct from "../../../types/Product";
 import Reducers from "../../../types/Reducers";
+
 import { productScreensProps } from "../../../routes/ProductsRoutes";
-import EmptyListText from "../../../components/EmptyListText";
+import { ContainerList } from "./styles";
 
 const ProductList = () => {
   const dispatch = useDispatch();

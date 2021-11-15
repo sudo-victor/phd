@@ -10,7 +10,7 @@ import {
   UpdatedAt,
 } from "./styles";
 
-export type DataCard = {
+type DataCard = {
   id: string;
   title: string;
   value: string;
@@ -46,4 +46,4 @@ const InfoCard: React.FC<Props> = ({ data }) => {
   );
 };
 
-export { InfoCard };
+export { InfoCard, DataCard };

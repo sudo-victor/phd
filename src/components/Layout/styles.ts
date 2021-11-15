@@ -7,6 +7,5 @@ export const Container = styled.SafeAreaView`
 
 export const Main = styled.View`
   flex: 1;
-
-  padding: 25px;
+  padding: 15px;
 `;

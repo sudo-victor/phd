@@ -6,11 +6,21 @@ interface TypeProps {
   type?: "sale" | "spent";
 }
 
-export const Container = styled.View<TypeProps>`
+export const Container = styled.View`
   width: 100%;
   padding: 16px;
   margin-right: 16px;
 
+  justify-content: space-between;
+
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.colors.shape};
+`;
+
+export const Header = styled.View`
+  width: 100%;
+
+  flex-direction: row;
   justify-content: space-between;
 
   border-radius: 5px;

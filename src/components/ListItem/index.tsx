@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/core";
 import { FontAwesome5, Feather } from "@expo/vector-icons";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 

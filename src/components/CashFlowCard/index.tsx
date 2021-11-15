@@ -2,6 +2,7 @@ import React from "react";
 
 import {
   Container,
+  Header,
   Title,
   Icon,
   Footer,
@@ -11,7 +12,8 @@ import {
   DoneAt,
 } from "./styles";
 
-type Data = {
+export type Data = {
+  id?: string;
   title?: string;
   value?: string;
   doneAt?: string;
@@ -35,8 +37,10 @@ const typeLabel = {
 const CashFlowCard: React.FC<Props> = ({ data }) => {
   return (
     <Container>
-      <Title>{data.title}</Title>
-      <Value type={data.type}>{data.value}</Value>
+      <Header>
+        <Title>{data.title}</Title>
+        <Value type={data.type}>{data.value}</Value>
+      </Header>
       <Footer>
         <CategoryContainer>
           <Icon name={icons[data.type]} type={data.type} />

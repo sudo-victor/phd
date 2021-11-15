@@ -1,24 +1,108 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/core";
 
 import Layout from "../../../components/Layout";
-import { DataCard, InfoCard } from "../../../components/InfoCard";
+import { InfoCard, DataCard } from "../../../components/InfoCard";
+import { CashFlowCard } from "../../../components/CashFlowCard";
+import H2 from "../../../components/Titles/H2";
 
 import {
   Icon,
+  InfoWrapper,
   ButtonsContainer,
   ButtonText,
-  Date,
+  DateLabel,
   InfoContainer,
   SaleButton,
   SpentButton,
   CashFlow,
-  CashFlowTitle,
   CashFlowCards,
   CashFlowCardSeparator,
 } from "./styles";
-import { CashFlowCard } from "../../../components/CashFlowCard";
+import { dailyScreensProps } from "../../../routes/DailyRoutes";
+import { IDaily } from "../../../types/Daily";
+import { numberToMoneyTemplate } from "../../../helpers/dataFormatting";
+import { dateFormatted } from "../../../helpers/date";
 
-const SaveDaily = () => {
+const initialInfoCard: DataCard[] = [
+  {
+    id: "1",
+    title: "Dinheiro",
+    value: "R$ 0,00",
+    type: "money",
+    updatedAt: "Nenhuma entrada feita",
+  },
+  {
+    id: "2",
+    title: "Cartão",
+    value: "R$ 0,00",
+    type: "card",
+    updatedAt: "Nenhuma entrada feita",
+  },
+  {
+    id: "3",
+    title: "Gastos",
+    value: "R$ 0,00",
+    type: "spent",
+    updatedAt: "Nenhuma saída feita",
+  },
+  {
+    id: "4",
+    title: "Total",
+    value: "R$ 0,00",
+    type: "total",
+    updatedAt: "Nenhum movimento feito",
+  },
+];
+
+const getValueOfInfoCard = {
+  money: (daily: IDaily) => daily.sales.cashTotal,
+  card: (daily: IDaily) => daily.sales.cardTotal,
+  spent: (daily: IDaily) => daily.spents.total,
+  total: (daily: IDaily) => daily.sales.total - daily.spents.total,
+};
+
+const SaveDaily = ({ route }) => {
+  const navigation = useNavigation<dailyScreensProps>();
+
+  const [daily, setDaily] = useState<IDaily>();
+  const [title, setTitle] = useState("");
+  const [infoCardGroup, setInfoCardGroup] =
+    useState<DataCard[]>(initialInfoCard);
+
+  useEffect(() => {
+    function loadDaily() {
+      if (route.params) {
+        setDaily(route.params.daily);
+        route.params.daily.createdAt &&
+          setTitle(dateFormatted(new Date(route.params.daily.createdAt)));
+      }
+    }
+
+    loadDaily();
+  }, [route]);
+
+  useEffect(() => {
+    function loadInfoCards() {
+      const newInfoCardGroup = infoCardGroup.map((ic) => {
+        const currentValue = getValueOfInfoCard[ic.type](daily);
+        return {
+          ...ic,
+          value: numberToMoneyTemplate(currentValue),
+          updatedAt:
+            currentValue === 0
+              ? "Nenhuma entrada feita"
+              : `Última entrada às 12:00`,
+        };
+      });
+      setInfoCardGroup(newInfoCardGroup);
+    }
+
+    const timer = setTimeout(loadInfoCards, 200);
+
+    return () => clearTimeout(timer);
+  }, [daily]);
+
   const data = [
     {
       id: "1",
@@ -34,62 +118,46 @@ const SaveDaily = () => {
       type: "spent",
       doneAt: "15:00",
     },
-  ];
-
-  const infoCards: DataCard[] = [
-    {
-      id: "1",
-      title: "Dinheiro",
-      value: "R$ 2.700,00",
-      type: "money",
-      updatedAt: "Última entrada às 17:20",
-    },
-    {
-      id: "2",
-      title: "Cartão",
-      value: "R$ 530,00",
-      type: "card",
-      updatedAt: "Última entrada às 16:00",
-    },
     {
       id: "3",
-      title: "Gastos",
-      value: "R$ 10,00",
+      title: "1 Água",
+      value: "R$ 2,00",
       type: "spent",
-      updatedAt: "Última saída às 13:00",
-    },
-    {
-      id: "4",
-      title: "Total",
-      value: "R$ 3.220,00",
-      type: "total",
-      updatedAt: "Último movimento às 17:20",
+      doneAt: "15:00",
     },
   ];
+
+  const handleNavigateToSale = () => {
+    navigation.navigate("SaleList");
+  };
+
+  const handleNavigateToSpent = () => {};
 
   return (
     <Layout title="Movimento de Caixa" hasGoBack>
-      <Date>Hoje</Date>
+      <DateLabel>{title}</DateLabel>
 
-      <InfoContainer>
-        {infoCards.map((info) => (
-          <InfoCard key={info.id} data={info} />
-        ))}
-      </InfoContainer>
+      <InfoWrapper>
+        <InfoContainer>
+          {infoCardGroup.map((info) => (
+            <InfoCard key={info.id} data={info} />
+          ))}
+        </InfoContainer>
+      </InfoWrapper>
 
       <ButtonsContainer>
-        <SaleButton>
+        <SaleButton onPress={handleNavigateToSale}>
           <Icon name="arrow-up-circle" size={19} color="#12A454" />
           <ButtonText>Vendas</ButtonText>
         </SaleButton>
-        <SpentButton>
+        <SpentButton onPress={handleNavigateToSpent}>
           <Icon name="arrow-down-circle" size={19} color="#EF6161" />
           <ButtonText>Gastos</ButtonText>
         </SpentButton>
       </ButtonsContainer>
 
       <CashFlow>
-        <CashFlowTitle>Listagem</CashFlowTitle>
+        <H2>Listagem</H2>
 
         <CashFlowCards
           data={data}

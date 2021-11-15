@@ -29,7 +29,7 @@ export interface IProduct {
 
 export interface ISpentWrapper {
   total: number;
-  spents: ISpent;
+  spents: ISpent[];
 }
 
 export interface ISpent {

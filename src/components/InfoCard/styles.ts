@@ -7,7 +7,8 @@ interface TypeProps {
 }
 
 export const Container = styled.View<TypeProps>`
-  width: ${RFPercentage(45)}px;
+  width: ${RFPercentage(40)}px;
+  height: ${RFPercentage(25)}px;
   padding: 16px;
   margin-right: 16px;
 

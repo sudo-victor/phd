@@ -13,6 +13,8 @@ export default {
 
     yellow: "#EFB661",
 
+    blue: "#359CEA",
+
     green: "#12A454",
     greenSecondary: "#068769",
     greenLinear: ["#49CDCD", "#12D3A5"],

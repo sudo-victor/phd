@@ -1,5 +1,6 @@
-import styled from 'styled-components/native';
-import {RectButton} from 'react-native-gesture-handler';
+import styled from "styled-components/native";
+import { RectButton } from "react-native-gesture-handler";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export const ContainerActions = styled.View`
   flex-direction: row;
@@ -7,8 +8,8 @@ export const ContainerActions = styled.View`
 `;
 
 export const ActionButton = styled(RectButton)`
-  width: 60px;
-  height: 60px;
+  width: ${RFValue(60)}px;
+  height: ${RFValue(60)}px;
 
   align-items: center;
   justify-content: center;
@@ -18,10 +19,10 @@ export const ActionButton = styled(RectButton)`
 `;
 
 export const EditButton = styled(ActionButton)`
-  background-color: ${props => props.theme.colors.yellow};
+  background-color: ${(props) => props.theme.colors.yellow};
 `;
 
 export const DeleteButton = styled(ActionButton)`
   margin-left: 10px;
-  background-color: ${props => props.theme.colors.red};
+  background-color: ${(props) => props.theme.colors.red};
 `;

@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { Feather } from "@expo/vector-icons";
 
-export const Date = styled.Text`
+export const DateLabel = styled.Text`
   margin-bottom: 16px;
 
   font-size: ${RFValue(16)}px;
@@ -12,12 +12,12 @@ export const Date = styled.Text`
   text-align: center;
 `;
 
+export const InfoWrapper = styled.View``;
+
 export const InfoContainer = styled.ScrollView.attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
-})`
-  height: ${RFValue(50)}px;
-`;
+})``;
 
 export const ButtonsContainer = styled.View`
   margin-top: 16px;
