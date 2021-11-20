@@ -11,11 +11,13 @@ import Reducers from "../../../types/Reducers";
 
 import { productScreensProps } from "../../../routes/ProductsRoutes";
 import { ContainerList } from "./styles";
+import { Alert } from "react-native";
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<productScreensProps>();
   const products = useSelector((state: Reducers) => state.product);
+  const daily = useSelector((state: Reducers) => state.daily);
 
   const goToForm = (item?) => {
     item
@@ -24,10 +26,26 @@ const ProductList = () => {
   };
 
   const handleDeleteProduct = (item) => {
-    dispatch({
-      type: "REMOVE_PRODUCT",
-      payload: { product: item },
+    let isUsed = false;
+
+    daily.forEach((d) => {
+      d.sales.sales.forEach((sale) => {
+        sale.products.forEach((product) => {
+          if (product.productId === item.id) {
+            isUsed = true;
+          }
+        });
+      });
     });
+
+    if (isUsed) {
+      Alert.alert("Este produto não pode ser excluído, pois está sendo usado.");
+    } else {
+      dispatch({
+        type: "REMOVE_PRODUCT",
+        payload: { product: item },
+      });
+    }
   };
 
   return (
