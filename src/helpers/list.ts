@@ -1,3 +1,3 @@
 export const sortByCreatedAt = (a, b) => {
-  return a.createdAt > b.createdAt ? -1 : 1;
+  return String(a.createdAt) > String(b.createdAt) ? -1 : 1;
 };

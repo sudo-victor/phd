@@ -12,53 +12,33 @@ import {
   Title,
   Value,
   Footer,
-  TypeWrapper,
-  Icon,
-  Separator,
-  SaleBy,
   CreatedAt,
   ContainerActions,
   DuplicateButton,
   EditButton,
   DeleteButton,
 } from "./styles";
-
-export type Item = {
-  id: string;
-  title: string;
-  value: string;
-  type: "card" | "money";
-  saleBy: string;
-  createdAt: string;
-};
+import { ISpent } from "../../types/Daily";
+import { dateToHoursTemplate } from "../../helpers/date";
+import { numberToMoneyTemplate } from "../../helpers/dataFormatting";
 
 type Props = {
-  item?: Item;
+  item?: ISpent;
   handleDeleteItem?: (item: any) => void;
+  handleDuplicateItem?: (item: any) => void;
   goToEdit?: (item: any) => void;
-};
-
-const icons = {
-  card: "credit-card-outline",
-  money: "cash-usd-outline",
 };
 
 export const ItemSpent: React.FC<Props> = ({ item }) => {
   return (
     <Container>
       <Header>
-        <Title>{item.title}</Title>
-        <Value>{item.value}</Value>
+        <Title>{item.name}</Title>
+        <Value>{numberToMoneyTemplate(item.total)}</Value>
       </Header>
 
       <Footer>
-        <TypeWrapper>
-          <Icon name={icons[item.type]} type={item.type} />
-          <Separator />
-          <SaleBy>Loja</SaleBy>
-        </TypeWrapper>
-
-        <CreatedAt>{item.createdAt}</CreatedAt>
+        <CreatedAt>{dateToHoursTemplate(item.createdAt)}</CreatedAt>
       </Footer>
     </Container>
   );
@@ -67,12 +47,13 @@ export const ItemSpent: React.FC<Props> = ({ item }) => {
 const RightActions: React.FC<Props> = ({
   item,
   handleDeleteItem,
+  handleDuplicateItem,
   goToEdit,
 }) => {
   {
     return (
       <ContainerActions>
-        <DuplicateButton onPress={() => goToEdit(item)}>
+        <DuplicateButton onPress={() => handleDuplicateItem(item)}>
           <MaterialCommunityIcons
             name="content-duplicate"
             color="#fff"
@@ -92,12 +73,18 @@ const RightActions: React.FC<Props> = ({
   }
 };
 
-const Spent: React.FC<Props> = ({ item, handleDeleteItem, goToEdit }) => {
+const Spent: React.FC<Props> = ({
+  item,
+  handleDeleteItem,
+  handleDuplicateItem,
+  goToEdit,
+}) => {
   return (
     <Swipeable
       renderRightActions={() => (
         <RightActions
           handleDeleteItem={handleDeleteItem}
+          handleDuplicateItem={handleDuplicateItem}
           goToEdit={goToEdit}
           item={item}
         />

@@ -3,7 +3,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface TypeProps {
-  type: "money" | "card" | "spent" | "total";
+  type: "money" | "card" | "spent" | "total" | "commission";
 }
 
 export const Container = styled.View<TypeProps>`

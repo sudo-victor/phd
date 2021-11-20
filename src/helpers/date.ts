@@ -12,10 +12,18 @@ export const dateFormatted = (date: Date): string => {
 };
 
 export const dateToString = (date: Date): string => {
-  const day = date.getDate();
-  const mounth = date.getMonth();
-  const year = date.getFullYear();
+  const d = new Date(date);
+  const day = d.getDate();
+  const mounth = d.getMonth();
+  const year = d.getFullYear();
   return `${day}/${mounth}/${year}`;
+};
+
+export const dateToHoursTemplate = (date: Date): string => {
+  const d = new Date(date);
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
 };
 
 export const compareDates = (firstDate: Date, secondDate: Date) => {

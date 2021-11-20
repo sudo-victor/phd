@@ -1,4 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
+import { numberToMoneyTemplate } from "../../helpers/dataFormatting";
+import { dateToHoursTemplate } from "../../helpers/date";
+
+import { ISale } from "../../types/Daily";
+import Reducers from "../../types/Reducers";
 
 import {
   Container,
@@ -9,19 +16,20 @@ import {
   Value,
   CategoryContainer,
   CategoryName,
-  DoneAt,
+  CreatedAt,
 } from "./styles";
 
-export type Data = {
-  id?: string;
-  title?: string;
-  value?: string;
-  doneAt?: string;
-  type?: "sale" | "spent";
+type Data = {
+  id: number;
+  name: string;
+  value: number;
+  type: "sale" | "spent";
+  createdAt: Date;
 };
 
 type Props = {
   data: Data;
+  type?: "sale" | "spent";
 };
 
 const icons = {
@@ -34,12 +42,14 @@ const typeLabel = {
   spent: "Gasto",
 };
 
+export type CashFlow = {};
+
 const CashFlowCard: React.FC<Props> = ({ data }) => {
   return (
     <Container>
       <Header>
-        <Title>{data.title}</Title>
-        <Value type={data.type}>{data.value}</Value>
+        <Title numberOfLines={1}>{data.name}</Title>
+        <Value type={data.type}>{numberToMoneyTemplate(data.value)}</Value>
       </Header>
       <Footer>
         <CategoryContainer>
@@ -47,7 +57,9 @@ const CashFlowCard: React.FC<Props> = ({ data }) => {
           <CategoryName>{typeLabel[data.type]}</CategoryName>
         </CategoryContainer>
 
-        <DoneAt>{data.doneAt}</DoneAt>
+        <CreatedAt>
+          {data.createdAt && dateToHoursTemplate(data.createdAt)}
+        </CreatedAt>
       </Footer>
     </Container>
   );

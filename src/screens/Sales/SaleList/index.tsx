@@ -1,81 +1,102 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/core";
+import { useDispatch, useSelector } from "react-redux";
 
 import Layout from "../../../components/Layout";
 import Sale from "../../../components/Sale";
 import H2 from "../../../components/Titles/H2";
-import { dailyScreensProps } from "../../../routes/DailyRoutes";
+import EmptyListText from "../../../components/EmptyListText";
 
-import { Container, SaleContainer, ItemList, SeparatorList } from "./styles";
+import { useDaily } from "../../../hooks/daily";
+
+import { dailyScreensProps } from "../../../routes/DailyRoutes";
+import Reducers from "../../../types/Reducers";
+import { ISale } from "../../../types/Daily";
+import { sortByCreatedAt } from "../../../helpers/list";
+import {
+  Container,
+  SaleContainer,
+  ItemList,
+  SeparatorList,
+  CommissionsButton,
+  CommissionsTitle,
+  Icon,
+} from "./styles";
 
 const SaleList = () => {
   const navigation = useNavigation<dailyScreensProps>();
+  const dailyPersisted = useSelector((state: Reducers) => state.daily);
+  const dispatch = useDispatch();
+  const { daily } = useDaily();
 
-  const sales = [
-    {
-      id: "1",
-      title: "2 Camisas",
-      value: "R$ 80,00",
-      type: "card",
-      saleBy: "Cacau",
-      createdAt: "13:00",
-    },
-    {
-      id: "2",
-      title: "2 Camisas",
-      value: "R$ 80,00",
-      type: "money",
-      saleBy: "Loja",
-      createdAt: "14:00",
-    },
-    {
-      id: "3",
-      title: "2 Camisas",
-      value: "R$ 80,00",
-      type: "card",
-      saleBy: "Loja",
-      createdAt: "15:00",
-    },
-    {
-      id: "4",
-      title: "2 Camisas",
-      value: "R$ 80,00",
-      type: "money",
-      saleBy: "Cacau",
-      createdAt: "16:00",
-    },
-    {
-      id: "5",
-      title: "2 Camisas",
-      value: "R$ 80,00",
-      type: "card",
-      saleBy: "Loja",
-      createdAt: "17:00",
-    },
-    {
-      id: "6",
-      title: "2 Camisas",
-      value: "R$ 80,00",
-      type: "money",
-      saleBy: "Fábio",
-      createdAt: "18:00",
-    },
-  ];
+  const [saleGroup, setSaleGroup] = useState<ISale[]>([]);
 
-  const goToForm = () => {
-    navigation.navigate("SaveSale");
+  const goToForm = (item?: any) => {
+    item
+      ? navigation.navigate("SaveSale", { sale: item })
+      : navigation.navigate("SaveSale");
   };
+
+  const handleGoToCommissions = () => {
+    navigation.navigate("CommissionList");
+  };
+
+  const handleDelete = (item: any) => {
+    dispatch({
+      type: "REMOVE_SALE",
+      payload: { sale: item, idDaily: daily.id },
+    });
+  };
+
+  const handleDuplicate = (item: any) => {
+    const data = {
+      ...item,
+      id: Math.random(),
+      createdAt: new Date(),
+    };
+
+    dispatch({
+      type: "ADD_SALE",
+      payload: { sale: data, idDaily: daily.id },
+    });
+  };
+
+  useEffect(() => {
+    function loadSaleGroup() {
+      const salesFiltered =
+        daily && dailyPersisted.find((d) => d.id === daily.id);
+
+      setSaleGroup(salesFiltered.sales.sales.sort(sortByCreatedAt));
+    }
+
+    loadSaleGroup();
+  }, [dailyPersisted]);
 
   return (
     <Layout title="Vendas" hasGoBack hasPlus handlePlus={() => goToForm()}>
       <Container>
+        <CommissionsButton onPress={handleGoToCommissions}>
+          <CommissionsTitle>Comissões</CommissionsTitle>
+          <Icon name="eye" size={18} />
+        </CommissionsButton>
+
         <SaleContainer>
           <H2>Lista de Vendas</H2>
           <ItemList
-            data={sales}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <Sale item={item} />}
-            ItemSeparatorComponent={({ item }) => <SeparatorList />}
+            data={saleGroup}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={({ item }) => (
+              <Sale
+                item={item}
+                handleDeleteItem={handleDelete}
+                handleDuplicateItem={handleDuplicate}
+                goToEdit={goToForm}
+              />
+            )}
+            ItemSeparatorComponent={() => <SeparatorList />}
+            ListEmptyComponent={() => (
+              <EmptyListText text="Nenhuma Venda Cadastrada" />
+            )}
           />
         </SaleContainer>
       </Container>

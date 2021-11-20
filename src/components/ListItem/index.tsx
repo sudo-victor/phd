@@ -7,7 +7,7 @@ import { ContainerActions, EditButton, DeleteButton } from "./styles";
 
 type Props = {
   item: any;
-  handleDeleteItem: (item: any) => void;
+  handleDeleteItem?: (item: any) => void;
   goToEdit: (item: any) => void;
 };
 
@@ -23,9 +23,11 @@ const RightActions: React.FC<Props> = ({
           <FontAwesome5 name="pencil-alt" color="#fff" size={18} />
         </EditButton>
 
-        <DeleteButton onPress={() => handleDeleteItem(item)}>
-          <Feather name="trash" color="#fff" size={18} />
-        </DeleteButton>
+        {handleDeleteItem && (
+          <DeleteButton onPress={() => handleDeleteItem(item)}>
+            <Feather name="trash" color="#fff" size={18} />
+          </DeleteButton>
+        )}
       </ContainerActions>
     );
   }

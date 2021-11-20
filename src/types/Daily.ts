@@ -16,15 +16,28 @@ export interface ISale {
   id?: number;
   createdAt: Date;
   products: IProduct[];
-  note: string;
-  saleType: string;
+  annotation: string;
+  saleType: "card" | "money";
   discount: number;
+  total: number;
+  commission: ICommissionWrapper;
 }
 
 export interface IProduct {
   id?: number;
   amount: number;
   productId: number;
+  total: number;
+}
+
+export interface ICommissionWrapper {
+  sellerId: string;
+  commissions: ICommission[];
+}
+
+export interface ICommission {
+  productId: string;
+  value: number;
 }
 
 export interface ISpentWrapper {
@@ -36,5 +49,6 @@ export interface ISpent {
   id?: number;
   createdAt: Date;
   name: string;
-  price: number;
+  amount: number;
+  total: number;
 }

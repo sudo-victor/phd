@@ -5,6 +5,7 @@ import Layout from "../../../components/Layout";
 import { InfoCard, DataCard } from "../../../components/InfoCard";
 import { CashFlowCard } from "../../../components/CashFlowCard";
 import H2 from "../../../components/Titles/H2";
+import EmptyListText from "../../../components/EmptyListText";
 
 import {
   Icon,
@@ -21,8 +22,12 @@ import {
 } from "./styles";
 import { dailyScreensProps } from "../../../routes/DailyRoutes";
 import { IDaily } from "../../../types/Daily";
+import Reducers from "../../../types/Reducers";
 import { numberToMoneyTemplate } from "../../../helpers/dataFormatting";
-import { dateFormatted } from "../../../helpers/date";
+import { dateFormatted, dateToHoursTemplate } from "../../../helpers/date";
+import { useDaily } from "../../../hooks/daily";
+import { useSelector } from "react-redux";
+import { sortByCreatedAt } from "../../../helpers/list";
 
 const initialInfoCard: DataCard[] = [
   {
@@ -48,6 +53,13 @@ const initialInfoCard: DataCard[] = [
   },
   {
     id: "4",
+    title: "Comissões",
+    value: "R$ 0,00",
+    type: "commission",
+    updatedAt: "Nenhum movimento feito",
+  },
+  {
+    id: "5",
     title: "Total",
     value: "R$ 0,00",
     type: "total",
@@ -56,76 +68,139 @@ const initialInfoCard: DataCard[] = [
 ];
 
 const getValueOfInfoCard = {
-  money: (daily: IDaily) => daily.sales.cashTotal,
-  card: (daily: IDaily) => daily.sales.cardTotal,
-  spent: (daily: IDaily) => daily.spents.total,
-  total: (daily: IDaily) => daily.sales.total - daily.spents.total,
+  money: (daily: IDaily) => {
+    return {
+      total: daily.sales.cashTotal,
+      updatedAt:
+        daily.sales.sales.length > 0
+          ? daily.sales.sales
+              .sort(sortByCreatedAt)
+              .filter((s) => s.saleType === "money")[0]?.createdAt
+          : null,
+    };
+  },
+  card: (daily: IDaily) => {
+    return {
+      total: daily.sales.cardTotal,
+      updatedAt:
+        daily.sales.sales.length > 0
+          ? daily.sales.sales
+              .sort(sortByCreatedAt)
+              .filter((s) => s.saleType === "card")[0]?.createdAt
+          : null,
+    };
+  },
+  spent: (daily: IDaily) => {
+    return {
+      total: daily.spents.total,
+      updatedAt:
+        daily.spents.spents.length > 0
+          ? daily.spents.spents.sort(sortByCreatedAt)[0]?.createdAt
+          : null,
+    };
+  },
+  commission: (daily: IDaily) => {
+    let lastSale = daily.sales.sales
+      .sort(sortByCreatedAt)
+      .filter((s) => s.commission.sellerId)[0];
+
+    let total = 0;
+
+    daily.sales.sales.forEach((sale) => {
+      sale.commission.commissions.forEach((c) => {
+        total += c.value;
+      });
+    });
+
+    return {
+      total: total,
+      updatedAt: lastSale ? lastSale.createdAt : null,
+    };
+  },
+  total: (daily: IDaily) => {
+    let commissionTotal = 0;
+
+    daily.sales.sales.forEach((sale) => {
+      sale.commission.commissions.forEach((c) => {
+        commissionTotal += c.value;
+      });
+    });
+
+    return {
+      total: daily.sales.total - daily.spents.total - commissionTotal,
+      updatedAt: daily.sales.sales.length
+        ? [...daily.sales.sales, ...daily.spents.spents].sort(
+            sortByCreatedAt
+          )[0]?.createdAt
+        : null,
+    };
+  },
 };
 
-const SaveDaily = ({ route }) => {
+const SaveDaily = () => {
   const navigation = useNavigation<dailyScreensProps>();
+  const dailyStorage = useSelector((state: Reducers) => state.daily);
+  const product = useSelector((state: Reducers) => state.product);
+  const { daily } = useDaily();
 
-  const [daily, setDaily] = useState<IDaily>();
   const [title, setTitle] = useState("");
+  const [cashFlows, setCashFlows] = useState([]);
   const [infoCardGroup, setInfoCardGroup] =
     useState<DataCard[]>(initialInfoCard);
 
   useEffect(() => {
     function loadDaily() {
-      if (route.params) {
-        setDaily(route.params.daily);
-        route.params.daily.createdAt &&
-          setTitle(dateFormatted(new Date(route.params.daily.createdAt)));
-      }
+      daily.createdAt && setTitle(dateFormatted(new Date(daily.createdAt)));
     }
 
-    loadDaily();
-  }, [route]);
-
-  useEffect(() => {
     function loadInfoCards() {
       const newInfoCardGroup = infoCardGroup.map((ic) => {
         const currentValue = getValueOfInfoCard[ic.type](daily);
         return {
           ...ic,
-          value: numberToMoneyTemplate(currentValue),
+          value: numberToMoneyTemplate(currentValue.total),
           updatedAt:
-            currentValue === 0
+            currentValue.total === 0
               ? "Nenhuma entrada feita"
-              : `Última entrada às 12:00`,
+              : `Último movimento às ${dateToHoursTemplate(
+                  currentValue.updatedAt && currentValue.updatedAt
+                )}`,
         };
       });
       setInfoCardGroup(newInfoCardGroup);
     }
 
-    const timer = setTimeout(loadInfoCards, 200);
+    function loadCashFlow() {
+      let cashFlowGroup = [...daily.sales.sales, ...daily.spents.spents]
+        .sort(sortByCreatedAt)
+        .map((flow: any) => {
+          let title = "";
+
+          flow.products &&
+            flow.products.forEach((p) => {
+              title += `${p.amount} ${
+                product.find((d) => d.id === p.productId).name
+              } `;
+            });
+
+          return {
+            id: flow.id,
+            name: flow.saleType ? title : flow.name,
+            value: flow.total,
+            type: flow.saleType ? "sale" : "spent",
+            createdAt: flow.createdAt,
+          };
+        });
+
+      setCashFlows(cashFlowGroup);
+    }
+
+    const timer = setTimeout(loadInfoCards, 100);
+    loadDaily();
+    loadCashFlow();
 
     return () => clearTimeout(timer);
-  }, [daily]);
-
-  const data = [
-    {
-      id: "1",
-      title: "2 Camisas",
-      value: "R$ 80,00",
-      type: "sale",
-      doneAt: "13:00",
-    },
-    {
-      id: "2",
-      title: "1 Água",
-      value: "R$ 2,00",
-      type: "spent",
-      doneAt: "15:00",
-    },
-    {
-      id: "3",
-      title: "1 Água",
-      value: "R$ 2,00",
-      type: "spent",
-      doneAt: "15:00",
-    },
-  ];
+  }, [dailyStorage]);
 
   const handleNavigateToSale = () => {
     navigation.navigate("SaleList");
@@ -162,10 +237,13 @@ const SaveDaily = ({ route }) => {
         <H2>Listagem</H2>
 
         <CashFlowCards
-          data={data}
-          keyExtractor={(item) => item.id}
+          data={cashFlows}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <CashFlowCard data={item} />}
           ItemSeparatorComponent={() => <CashFlowCardSeparator />}
+          ListEmptyComponent={() => (
+            <EmptyListText text="Nenhum Movimento Cadastrado" />
+          )}
         />
       </CashFlow>
     </Layout>

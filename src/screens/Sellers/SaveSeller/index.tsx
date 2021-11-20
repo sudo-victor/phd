@@ -48,7 +48,6 @@ const SaveSeller = ({ route }) => {
   useEffect(() => {
     function loadSellerIfExists() {
       if (route.params) {
-        console.log(route.params);
         setSellerId(route.params.seller.id);
         setName(route.params.seller.name);
         setCommissionGroup(route.params.seller.commissions);
@@ -195,6 +194,7 @@ const SaveSeller = ({ route }) => {
                 label="Comissão"
                 value={currentCommission}
                 onChangeText={setCurrentCommission}
+                placeholder="R$ 00,00"
               />
             </FieldWrapper>
           </CommissionsContainer>

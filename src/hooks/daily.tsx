@@ -1,5 +1,4 @@
-import { useContext } from "hoist-non-react-statics/node_modules/@types/react";
-import React, { useState, createContext, ReactNode } from "react";
+import React, { useState, createContext, ReactNode, useContext } from "react";
 
 import { IDaily } from "../types/Daily";
 

@@ -26,7 +26,6 @@ export const DuplicateButton = styled(ActionButton)`
 
 export const EditButton = styled(ActionButton)`
   background-color: ${(props) => props.theme.colors.yellow};
-  border-radius: 0;
 `;
 
 export const DeleteButton = styled(ActionButton)`
@@ -52,6 +51,8 @@ export const Header = styled.View`
 `;
 
 export const Title = styled.Text`
+  max-width: 150px;
+
   color: ${({ theme }) => theme.colors.gray};
   font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(16)}px;

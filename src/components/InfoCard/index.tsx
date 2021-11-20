@@ -15,7 +15,7 @@ type DataCard = {
   title: string;
   value: string;
   updatedAt: string;
-  type: "money" | "card" | "spent" | "total";
+  type: "money" | "card" | "spent" | "total" | "commission";
 };
 
 type Props = {
@@ -27,6 +27,7 @@ const icons = {
   card: "card-text",
   spent: "cash-minus",
   total: "cash-register",
+  commission: "account-cash",
 };
 
 const InfoCard: React.FC<Props> = ({ data }) => {

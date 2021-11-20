@@ -78,7 +78,6 @@ const SaveProduct = ({ route }) => {
   };
 
   const getDataProduct = (): IProduct => {
-    console.log(moneyTemplateToNumber(entryPrice));
     return {
       id: productId ? productId : Math.random(),
       name: name,

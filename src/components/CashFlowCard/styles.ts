@@ -66,7 +66,7 @@ export const CategoryName = styled.Text`
   color: ${({ theme }) => theme.colors.gray};
 `;
 
-export const DoneAt = styled.Text`
+export const CreatedAt = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(16)}px;
   color: ${({ theme }) => theme.colors.label};

@@ -11,6 +11,7 @@ import { IDaily } from "../../../types/Daily";
 
 import { dailyScreensProps } from "../../../routes/DailyRoutes";
 import { compareDates, dateFormatted } from "../../../helpers/date";
+import { useDaily } from "../../../hooks/daily";
 import { ContainerList } from "./styles";
 import { sortByCreatedAt } from "../../../helpers/list";
 
@@ -18,6 +19,7 @@ const DailyList = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<dailyScreensProps>();
   const daily = useSelector((state: Reducers) => state.daily);
+  const { handleUpdateDaily } = useDaily();
 
   const [dailyFormatted, setDailyFormatted] = useState([]);
 
@@ -36,18 +38,20 @@ const DailyList = () => {
     loadDaily();
   }, [daily]);
 
-  const goToForm = (item?) => {
+  const goToForm = (id?: number) => {
     const today = new Date();
+    const itemById = daily.find((item) => item.id === id);
     const alreadyExists =
-      item || daily.find((d) => compareDates(new Date(d.createdAt), today));
+      itemById || daily.find((d) => compareDates(new Date(d.createdAt), today));
 
     const newDaily = generateDaily();
 
     if (!alreadyExists) {
-      !item && handleCreateDaily(newDaily);
+      !itemById && handleCreateDaily(newDaily);
     }
 
-    navigation.navigate("SaveDaily", { daily: alreadyExists || newDaily });
+    handleUpdateDaily(alreadyExists || newDaily);
+    navigation.navigate("SaveDaily");
   };
 
   const generateDaily = (): IDaily => {
@@ -92,11 +96,7 @@ const DailyList = () => {
           <EmptyListText text="Nenhuma Diária Cadastrada" />
         )}
         renderItem={({ item }) => (
-          <ListItem
-            handleDeleteItem={handleDeleteDaily}
-            goToEdit={goToForm}
-            item={item}
-          />
+          <ListItem goToEdit={() => goToForm(item.id)} item={item} />
         )}
       />
     </Layout>

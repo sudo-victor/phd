@@ -26,7 +26,6 @@ export const DuplicateButton = styled(ActionButton)`
 
 export const EditButton = styled(ActionButton)`
   background-color: ${(props) => props.theme.colors.yellow};
-  border-radius: 0;
 `;
 
 export const DeleteButton = styled(ActionButton)`
@@ -67,7 +66,7 @@ export const Footer = styled.View`
   width: 100%;
 
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
 `;
 
 export const TypeWrapper = styled.View`
